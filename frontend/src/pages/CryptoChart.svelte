@@ -4,13 +4,12 @@
   import { io } from 'socket.io-client';       
 
   
-  let chart;     // Will hold the Chart.js instance
-  let chartEl;   // Reference to the canvas DOM element where the chart will be rendered
+  let chart;     // hold Chart.js 
+  let chartEl;   // canvas DOM element where the chart will be rendered
   let prices = []; // Array to store price data points
-  let labels = []; // Array to store time labels for the x-axis
-  let socket;    // Will hold the Socket.io connection
+  let labels = []; // store time labels for the x-axis
+  let socket;    // hold the Socket.io connection
 
-  // Each coin has an id (for API), name, brand color, and symbol
   const coins = [
     { id: 'bitcoin', name: 'Bitcoin (BTC)', color: '#F7931A', symbol: 'BTC' },
     { id: 'ethereum', name: 'Ethereum (ETH)', color: '#627EEA', symbol: 'ETH' },
@@ -34,106 +33,80 @@
   let currentPrice = 0;    
   let priceChange = 0;     
   
-  /**
-   * Handles coin selection from the UI
-   * @param {Object} coin - The selected coin object
-   */
   function selectCoin(coin) {
-    selectedCoin = coin;                // Update selected coin
-    updateChartAppearance();           // Update chart colors to match coin
-    requestCoinData();                 // Request fresh data for the selected coin
+    selectedCoin = coin;               
+    updateChartAppearance();           
+    requestCoinData();                
   }
   
-  /**
-   * Handles timeframe selection from the UI
-   * @param {string} timeframe - The number of days to display ('1', '7', '30', '90')
-   */
+  
   function selectTimeframe(timeframe) {
-    selectedTimeframe = timeframe;     // Update selected timeframe
-    requestCoinData();                // Request data for the new timeframe
+    selectedTimeframe = timeframe;     
+    requestCoinData();                
   }
   
-  /**
-   * Requests cryptocurrency price data from the server via WebSocket
-   * Sends the coin ID and timeframe to get specific historical data
-   */
   function requestCoinData() {
     if (socket) {
       socket.emit('request_coin_data', { 
-        coinId: selectedCoin.id,      // Which cryptocurrency to fetch
-        days: selectedTimeframe       // How many days of history
+        coinId: selectedCoin.id,      
+        days: selectedTimeframe      
       });
     }
   }
   
-  /**
-   * Updates the chart's visual appearance based on selected coin
-   * Changes colors and labels to match the selected cryptocurrency
-   */
+ 
   function updateChartAppearance() {
-    if (!chart) return;  // Safety check if chart isn't initialized yet
+    if (!chart) return;  
     
-    // Update chart label with coin symbol
     chart.data.datasets[0].label = `${selectedCoin.symbol} Price (USD)`;
     
-    // Update chart colors based on coin's brand color
     chart.data.datasets[0].borderColor = selectedCoin.color;
-    chart.data.datasets[0].backgroundColor = `${selectedCoin.color}33`;  // 33 is hex for 20% opacity
+    chart.data.datasets[0].backgroundColor = `${selectedCoin.color}33`;  
     
-    // Apply changes to the chart
     chart.update();
   }
   
-  /**
-   * Calculates the percentage price change between first and last data points
-   * @param {Array} priceData - Array of price data objects with 'price' property
-   * @return {number} - Percentage change (positive or negative)
-   */
+ 
   function calculatePriceChange(priceData) {
-    if (priceData.length < 2) return 0;  // Need at least 2 points to calculate change
+    if (priceData.length < 2) return 0;  
     
-    const firstPrice = priceData[0].price;           // Starting price
-    const lastPrice = priceData[priceData.length - 1].price;  // Ending price
+    const firstPrice = priceData[0].price;           
+    const lastPrice = priceData[priceData.length - 1].price;  
     
-    // Calculate percentage change formula: ((new - old) / old) * 100
     return ((lastPrice - firstPrice) / firstPrice) * 100;
   }
 
-  /**
-   * Component initialization function - runs when component is mounted to DOM
-   * Sets up chart, establishes socket connection, and prepares data listeners
-   */
   onMount(() => {
-    // Initialize Chart.js chart
+    
     chart = new Chart(chartEl, {
-      type: 'line',               // Line chart type for time series data
+      type: 'line',               
       data: {
-        labels,                   // X-axis labels (time)
+        labels,                   
         datasets: [{
           label: `${selectedCoin.symbol} Price (USD)`,
-          data: prices,           // Y-axis data (prices)
-          borderColor: selectedCoin.color,      // Line color
-          backgroundColor: `${selectedCoin.color}33`,  // Fill color with opacity
-          tension: 0.2,           // Curve smoothness (0 = straight lines)
-          fill: true,             // Fill area under the line
+          data: prices,          
+          borderColor: selectedCoin.color,      
+          backgroundColor: `${selectedCoin.color}33`,  
+          tension: 0.2,           
+          fill: true,             
         }]
       },
       options: {
-        responsive: true,         // Resize chart when container resizes
+        responsive: true,         
         plugins: { 
-          legend: { display: false }  // Hide legend for cleaner look
+          legend: { display: false }  
         },
         scales: {
           x: {
             display: true,
             ticks: { 
-              color: '#fff',      // White text for dark theme
-              maxTicksLimit: 6,   // Limit number of x-axis labels
-              maxRotation: 0      // Keep labels horizontal
+              color: '#fff',      
+              maxTicksLimit: 6,   
+              maxRotation: 0      
             }
           },
           y: {
-            ticks: { color: '#fff' }  // White text for y-axis
+            ticks: { color: '#fff' }  
           }
         }
       }
@@ -141,11 +114,8 @@
 
     socket = io('http://localhost:3000');
     
-    // Set up listeners for price updates from each supported coin
     coins.forEach(coin => {
-      // Listen for specific coin's price history events
       socket.on(`${coin.id}_history`, (data) => {
-        // Only process data if it's for currently selected coin
         if (selectedCoin.id === coin.id) {
           prices = data.map(p => p.price);
           labels = data.map(p => {
@@ -159,14 +129,12 @@
           chart.data.datasets[0].data = prices;
           chart.update();
           
-          // Update price stats
           currentPrice = data[data.length - 1]?.price || 0;
           priceChange = calculatePriceChange(data);
         }
       });
     });
     
-    // Request data for initially selected coin
     requestCoinData();
   });
 
