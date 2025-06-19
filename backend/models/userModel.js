@@ -1,9 +1,9 @@
-import { DataTypes, Model } from 'sequelize';
-import sequelize from '../utils/db.js'; 
-import { hashPassword, comparePassword } from '../utils/hashPassword.js'; 
+import { DataTypes, Model } from "sequelize";
+import sequelize from "../utils/db.js";
+import { hashPassword, comparePassword } from "../utils/hashPassword.js";
 
 class User extends Model {
-  // compare typed password with hashed database password 
+  // compare typed password with hashed database password
   async comparePassword(candidatePassword) {
     return comparePassword(candidatePassword, this.password);
   }
@@ -18,7 +18,7 @@ User.init(
       unique: true,
       trim: true,
       validate: {
-        len: [3, 20], 
+        len: [3, 20],
       },
     },
     email: {
@@ -26,14 +26,14 @@ User.init(
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true, 
+        isEmail: true,
       },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [6], 
+        len: [6],
       },
     },
     isFirstLogin: {
@@ -43,19 +43,19 @@ User.init(
   },
   {
     sequelize, // insures user model to database connection
-    modelName: 'User', 
+    modelName: "User",
     hooks: {
       // hash password before saving the user
       beforeCreate: async (user) => {
         user.password = await hashPassword(user.password);
       },
       beforeUpdate: async (user) => {
-        if (user.changed('password')) {
+        if (user.changed("password")) {
           user.password = await hashPassword(user.password);
         }
       },
     },
-  }
+  },
 );
 
 export default User;

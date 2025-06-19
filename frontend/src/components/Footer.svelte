@@ -7,8 +7,8 @@
     © {new Date().getFullYear()} My Crypto App. All rights reserved.
   </p>
   <p>
-    <Link to="/privacy-policy">Privacy Policy</Link> | 
-    We use cookies to improve your experience. By using our site, you agree to our use of cookies and our GDPR-compliant practices.
+    <Link to="/privacy-policy">Privacy Policy</Link> | We use cookies to improve your experience. By using our site, you agree to our use of cookies and our GDPR-compliant
+    practices.
   </p>
 </footer>
 

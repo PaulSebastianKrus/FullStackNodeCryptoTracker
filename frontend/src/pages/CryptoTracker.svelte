@@ -65,7 +65,8 @@
     font-size: 1rem;
     box-shadow: 0 2px 16px #0006;
   }
-  .crypto-table th, .crypto-table td {
+  .crypto-table th,
+  .crypto-table td {
     padding: 1rem 0.75rem;
     text-align: left;
   }

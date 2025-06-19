@@ -7,26 +7,26 @@
   let notifications = [];
   let loading = false;
   let error = null;
-  
+
   $: userId = $currentUser?.id;
-  
+
   $: if (userId) {
     fetchNotifications();
   }
 
   async function fetchNotifications() {
     if (!userId) return;
-    
+
     loading = true;
     error = null;
     try {
       console.log('Fetching notifications for user:', userId);
       const res = await fetch(`http://localhost:3000/api/portfolio/notifications?userId=${userId}`);
-      
+
       if (!res.ok) {
         throw new Error(`Failed to fetch notifications: ${res.status}`);
       }
-      
+
       notifications = await res.json();
       console.log('Notifications received:', notifications);
     } catch (err) {
@@ -42,8 +42,8 @@
     try {
       const res = await fetch(`http://localhost:3000/api/portfolio/notifications/${id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Failed to delete notification');
-      
-      notifications = notifications.filter(n => n.id !== id);
+
+      notifications = notifications.filter((n) => n.id !== id);
       toast.success('Notification deleted');
     } catch (err) {
       console.error('Error deleting notification:', err);
@@ -55,7 +55,7 @@
 <PrivateRoute redirectTo="/login">
   <div class="container">
     <h2>Your Notifications</h2>
-    
+
     {#if loading}
       <p>Loading notifications...</p>
     {:else if error}
@@ -70,7 +70,7 @@
         {#each notifications as n}
           <li class="notification-item">
             <div class="notification-content">
-              <strong>{n.coinId}</strong> 
+              <strong>{n.coinId}</strong>
               {#if n.type === 'above'}
                 <span class="above">rose above ${parseFloat(n.threshold).toFixed(4)}</span>
               {:else}
@@ -128,16 +128,16 @@
   .delete-btn:hover {
     background-color: #c53030;
   }
-  
+
   .price-info {
     color: #48bb78;
     font-weight: bold;
   }
-  
+
   .above {
     color: #48bb78; /* Green for price above */
   }
-  
+
   .below {
     color: #f56565; /* Red for price below */
   }

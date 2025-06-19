@@ -2,8 +2,8 @@
   import PrivateRoute from '../components/PrivateRouteGuard.svelte';
   import { currentUser } from '../stores/generalStore.js';
   import { onMount } from 'svelte';
-  import toast from 'svelte-french-toast'; 
-  
+  import toast from 'svelte-french-toast';
+
   let coinId = '';
   let userId;
   let userCoins = [];
@@ -20,14 +20,14 @@
         body: JSON.stringify({ userId, coinId }),
       });
       const data = await response.json();
-      
+
       toast.success(data.message);
-      
+
       coinId = '';
       await fetchUserCoins();
     } catch (error) {
       console.error('Error adding coin:', error);
-      toast.error('Failed to add coin'); 
+      toast.error('Failed to add coin');
     }
   }
 
@@ -44,7 +44,6 @@
     }
   }
 
-  
   let originalIdMap = {};
 
   async function fetchUserCoins() {
@@ -72,7 +71,7 @@
     }
     loading = true;
     // Build a comma-separated list of coin IDs
-    const ids = userCoins.map(c => c.coinId).join(',');
+    const ids = userCoins.map((c) => c.coinId).join(',');
     try {
       const res = await fetch(`http://localhost:3000/api/crypto/user-prices?ids=${ids}`);
       coinData = await res.json();
@@ -83,7 +82,6 @@
     loading = false;
   }
 
-  
   $: if (userId) fetchUserCoins();
 </script>
 
@@ -127,8 +125,8 @@
               <td>${coin.price?.toLocaleString()}</td>
               <td>
                 {#if coin.change_24h !== undefined}
-                  <span class={coin.change_24h >= 0 ? "green" : "red"}>
-                    {coin.change_24h >= 0 ? "+" : ""}{coin.change_24h?.toFixed(2)}%
+                  <span class={coin.change_24h >= 0 ? 'green' : 'red'}>
+                    {coin.change_24h >= 0 ? '+' : ''}{coin.change_24h?.toFixed(2)}%
                   </span>
                 {:else}
                   N/A
@@ -182,7 +180,8 @@
     font-size: 1rem;
     box-shadow: 0 2px 16px #0006;
   }
-  .crypto-table th, .crypto-table td {
+  .crypto-table th,
+  .crypto-table td {
     padding: 1rem 0.75rem;
     text-align: left;
   }

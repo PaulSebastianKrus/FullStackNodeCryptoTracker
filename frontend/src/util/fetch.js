@@ -1,4 +1,4 @@
-import { refreshAccessToken } from './token.js'; 
+import { refreshAccessToken } from './token.js';
 
 export const apiRequest = async (endpoint, method, body) => {
   try {
@@ -14,10 +14,10 @@ export const apiRequest = async (endpoint, method, body) => {
       method,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${currentToken}`, 
+        Authorization: `Bearer ${currentToken}`,
       },
       body: JSON.stringify(body),
-      credentials: 'include', 
+      credentials: 'include',
     });
 
     const data = await response.json();
@@ -28,10 +28,9 @@ export const apiRequest = async (endpoint, method, body) => {
 
     return data;
   } catch (error) {
-    throw error; 
+    throw error;
   }
 };
-
 
 export const login = async (email, password) => {
   return apiRequest('/api/auth/login', 'POST', { email, password });

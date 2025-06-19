@@ -1,4 +1,4 @@
-import rateLimit from 'express-rate-limit';
+import rateLimit from "express-rate-limit";
 
 // global rate limiter
 const limiter = rateLimit({
@@ -6,10 +6,10 @@ const limiter = rateLimit({
   max: 100, // each IP to 100 requests per windowMs (rate limiting rules)
   message: {
     status: 429,
-    message: 'Too many requests, please try again later.',
+    message: "Too many requests, please try again later.",
   },
-  standardHeaders: true, 
-  legacyHeaders: false, 
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 
 export default limiter;

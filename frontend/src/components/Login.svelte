@@ -22,10 +22,10 @@
       if (isLoginMode) {
         currentUser.set(response.user);
         toast.success('Welcome back!');
-        
+
         setTimeout(() => {
           window.location.href = '/dashboard';
-        }, 1000); 
+        }, 1000);
       } else {
         toast.success('Account created! Please log in.');
         resetForm();
@@ -89,7 +89,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 80vh; 
+    min-height: 80vh;
   }
   main {
     max-width: 400px;

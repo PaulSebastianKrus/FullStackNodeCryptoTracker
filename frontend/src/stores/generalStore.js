@@ -32,12 +32,12 @@ tokenExpiry.subscribe((value) => {
 });
 
 export const logout = () => {
-  currentUser.set(null); 
-  token.set(null); 
-  tokenExpiry.set(null); 
-  lastVisitedRoute.set('/'); 
-  localStorage.removeItem('currentUser'); 
+  currentUser.set(null);
+  token.set(null);
+  tokenExpiry.set(null);
+  lastVisitedRoute.set('/');
+  localStorage.removeItem('currentUser');
   localStorage.removeItem('token');
-  localStorage.removeItem('tokenExpiry'); 
-  window.location.href = '/login'; 
+  localStorage.removeItem('tokenExpiry');
+  window.location.href = '/login';
 };

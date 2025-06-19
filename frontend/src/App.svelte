@@ -1,21 +1,21 @@
 <script>
-  import { onMount } from 'svelte'; 
+  import { onMount } from 'svelte';
   import { Router, Link, Route, navigate } from 'svelte-routing';
-  import { Toaster } from 'svelte-french-toast'; 
-  import { currentUser, logout, tokenExpiry } from './stores/generalStore.js'; 
+  import { Toaster } from 'svelte-french-toast';
+  import { currentUser, logout, tokenExpiry } from './stores/generalStore.js';
   import { refreshAccessToken } from './util/token.js';
   import { get } from 'svelte/store';
   import Login from './components/Login.svelte';
-  import Dashboard from './pages/Dashboard.svelte'; 
+  import Dashboard from './pages/Dashboard.svelte';
   import Header from './components/Header.svelte';
   import CryptoTracker from './pages/CryptoTracker.svelte';
   import CryptoChart from './pages/CryptoChart.svelte';
-  import PrivacyPolicy from './pages/PrivacyPolicy.svelte'; 
+  import PrivacyPolicy from './pages/PrivacyPolicy.svelte';
   import Portfolio from './pages/Portfolio.svelte';
-  import Notifications from './pages/Notifications.svelte'
-  import News from './pages/News.svelte'
+  import Notifications from './pages/Notifications.svelte';
+  import News from './pages/News.svelte';
   import Footer from './components/Footer.svelte';
-  export let url = ''; 
+  export let url = '';
 
   // refresh token on user interaction
   const handleUserAction = async () => {
@@ -25,19 +25,17 @@
         await refreshAccessToken();
       } catch (err) {
         console.error('Failed to refresh token:', err);
-        logout(); 
+        logout();
         window.location.href = '/login';
       }
     }
   };
 
   onMount(() => {
-   
     if (window.location.pathname === '/') {
       navigate('/login');
     }
 
-    
     document.body.addEventListener('click', handleUserAction);
     document.body.addEventListener('keydown', handleUserAction);
     return () => {
@@ -78,7 +76,6 @@
   <Footer />
 </Router>
 
-
 <Toaster />
 
 <style>
@@ -88,21 +85,21 @@
     background: #222;
     min-height: 100vh;
   }
-  
+
   .content-container {
     padding-top: 60px;
-    padding-bottom: 80px; 
+    padding-bottom: 80px;
   }
 
   :global(.footer) {
-    background: #111; 
-    color: #aaa; 
-    text-align: center; 
+    background: #111;
+    color: #aaa;
+    text-align: center;
     padding: 1rem;
     position: fixed;
     bottom: 0;
-    left: 50%; 
-    transform: translateX(-50%); 
+    left: 50%;
+    transform: translateX(-50%);
     width: 100%;
     font-size: 0.9rem;
     z-index: 100;
